@@ -79,7 +79,7 @@ class DeviceListFilterBackend(DjangoFilterBackend):
             except ValueError:
                 raise ValidationError({"config__templates": _("Invalid UUID format")})
             # Add the config__templates filter to the queryset
-            return queryset.filter(config__templates=config_template_uuid_obj)
+            queryset = queryset.filter(config__templates=config_template_uuid_obj)
         return super().filter_queryset(request, queryset, view)
 
 

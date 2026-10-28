@@ -356,6 +356,15 @@ class TestConfigApi(
             r2 = self.client.get(f"{path}?config__templates={t2.pk}")
             _assert_device_list_filter(response=r2, device=d2)
 
+        with self.subTest(
+            "Test filtering using config templates combined with other filters"
+        ):
+            r1 = self.client.get(f"{path}?config__templates={t1.pk}&name={d1.name}")
+            _assert_device_list_filter(response=r1, device=d1)
+            r2 = self.client.get(f"{path}?config__templates={t1.pk}&name={d2.name}")
+            self.assertEqual(r2.status_code, 200)
+            self.assertEqual(r2.data["count"], 0)
+
         with self.subTest("Test filtering using config templates invalid uuid"):
             # test with invalid uuid string
             r1 = self.client.get(f"{path}?config__templates={t1.pk}invalid_uuid")
